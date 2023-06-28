@@ -13,6 +13,10 @@ class Database {
 
     return shareId;
   }
+
+  getMessages(shareId: number) {
+    return this.collection.get(shareId);
+  }
 }
 const database = new Database();
 

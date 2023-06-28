@@ -19,9 +19,11 @@ export default async function callbackQuerySceneHandler(
   const data = ctx.callbackQuery.data;
 
   if (data === "share-finish") {
+    const messageIds = telegram.messages.get(chatId) || [];
     const forwardedMessageIds = await telegram.forwardMessages(
       env.dbChannelId,
-      chatId
+      chatId,
+      messageIds
     );
     const botUsername = ctx.botInfo.username;
     const shareId = database.saveMessages(forwardedMessageIds);

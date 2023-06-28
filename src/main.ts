@@ -10,6 +10,7 @@ const app = telegram.app;
 app.use(session());
 app.use(stage.middleware());
 
+app.command("start", commands.startHandler);
 app.command("share", commands.shareHandler);
 
 async function main() {

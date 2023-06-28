@@ -65,8 +65,11 @@ class Telegram {
     this.messages.delete(chatId);
   }
 
-  async forwardMessages(toChatId: number, fromChatId: number) {
-    const messageIds = this.messages.get(fromChatId) || [];
+  async forwardMessages(
+    toChatId: number,
+    fromChatId: number,
+    messageIds: number[]
+  ) {
     const resultIds: number[] = [];
 
     for (const messageId of messageIds) {
@@ -77,9 +80,10 @@ class Telegram {
       );
       resultIds.push(result.message_id);
     }
-    this.clearMessages(fromChatId);
-    this.firstWaitingMessage = true;
-
+    if (fromChatId === env.dbChannelId) {
+      this.clearMessages(fromChatId);
+      this.firstWaitingMessage = true;
+    }
     return resultIds;
   }
 }
