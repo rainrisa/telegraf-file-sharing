@@ -58,11 +58,12 @@ class Telegram {
     const messages = this.messages.get(chatId) || [];
     messages.push(messageId);
     this.messages.set(chatId, messages);
-    console.log({ messages });
   }
 
   clearMessages(chatId: number) {
     this.messages.delete(chatId);
+    this.firstWaitingMessage = true;
+    this.waitingMessageId = NaN;
   }
 
   async forwardMessages(
@@ -79,10 +80,6 @@ class Telegram {
         messageId
       );
       resultIds.push(result.message_id);
-    }
-    if (fromChatId === env.dbChannelId) {
-      this.clearMessages(fromChatId);
-      this.firstWaitingMessage = true;
     }
     return resultIds;
   }

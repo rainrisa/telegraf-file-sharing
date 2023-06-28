@@ -19,7 +19,14 @@ export default async function callbackQuerySceneHandler(
   const data = ctx.callbackQuery.data;
 
   if (data === "share-finish") {
-    const messageIds = telegram.messages.get(chatId) || [];
+    const messageIds = telegram.messages.get(chatId);
+
+    telegram.clearMessages(chatId);
+    await ctx.scene.leave();
+
+    if (!messageIds) {
+      return ctx.editMessageText("You are not sending any message");
+    }
     const forwardedMessageIds = await telegram.forwardMessages(
       env.dbChannelId,
       chatId,
@@ -28,7 +35,6 @@ export default async function callbackQuerySceneHandler(
     const botUsername = ctx.botInfo.username;
     const shareId = database.saveMessages(forwardedMessageIds);
 
-    await ctx.scene.leave();
     await ctx.editMessageText("Okay");
     await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);
   }
