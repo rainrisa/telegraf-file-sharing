@@ -8,6 +8,9 @@ export default async function startHandler(ctx: CommandContext) {
   const shareId = ctx.message.text.split(" ")[1] || undefined;
   const messageIds = database.getMessages(Number(shareId));
 
+  if (!shareId) {
+    return ctx.reply(`Hello ${ctx.from.first_name}!`);
+  }
   if (!messageIds) {
     return ctx.reply("Message not found, try another link");
   }
