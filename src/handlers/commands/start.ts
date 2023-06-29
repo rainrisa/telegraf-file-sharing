@@ -5,12 +5,25 @@ import telegram from "../../services/telegram.js";
 
 export default async function startHandler(ctx: CommandContext) {
   const chatId = ctx.chat.id;
-  const shareId = ctx.message.text.split(" ")[1] || undefined;
-  const messageIds = database.getMessages(Number(shareId));
+  const shareId = Number(ctx.message.text.split(" ")[1]) || undefined;
+  const user = ctx.from;
+  const userId = user.id;
 
   if (!shareId) {
-    return ctx.reply(`Hello ${ctx.from.first_name}!`);
+    return ctx.reply(`Hello ${user.first_name}!`);
   }
+  const chatsUserHasNotJoined = await telegram.getChatsUserHasNotJoined(userId);
+
+  if (chatsUserHasNotJoined.length) {
+    return telegram.sendForceJoinMessage(
+      shareId,
+      chatId,
+      user,
+      chatsUserHasNotJoined
+    );
+  }
+  const messageIds = database.getMessages(Number(shareId));
+
   if (!messageIds) {
     return ctx.reply("Message not found, try another link");
   }
