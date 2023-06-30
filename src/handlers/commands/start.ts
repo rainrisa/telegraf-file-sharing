@@ -1,4 +1,5 @@
 import { CommandContext } from "../../interfaces.js";
+import auth from "../../services/auth.js";
 import database from "../../services/database.js";
 import env from "../../services/env.js";
 import telegram from "../../services/telegram.js";
@@ -12,15 +13,18 @@ export default async function startHandler(ctx: CommandContext) {
   if (!shareId) {
     return ctx.reply(`Hello ${user.first_name}!`);
   }
-  const chatsUserHasNotJoined = await telegram.getChatsUserHasNotJoined(userId);
-
-  if (chatsUserHasNotJoined.length) {
-    return telegram.sendForceJoinMessage(
-      shareId,
-      chatId,
-      user,
-      chatsUserHasNotJoined
+  if (!auth.isAdmin(userId)) {
+    const chatsUserHasNotJoined = await telegram.getChatsUserHasNotJoined(
+      userId
     );
+    if (chatsUserHasNotJoined.length) {
+      return telegram.sendForceJoinMessage(
+        shareId,
+        chatId,
+        user,
+        chatsUserHasNotJoined
+      );
+    }
   }
   const messageIds = database.getMessages(Number(shareId));
 
