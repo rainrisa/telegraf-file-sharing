@@ -9,6 +9,7 @@ const port = env.PORT || 8080;
 const forceChannelIds = env.FORCE_CHANNEL_IDS?.split(" ").map(Number) || [];
 const forceGroupIds = env.FORCE_GROUP_IDS?.split(" ").map(Number) || [];
 const adminIds = env.ADMIN_IDS?.split(" ").map(Number);
+const databaseUrl = env.DATABASE_URL;
 
 if (!token) {
   throw Error("Provide TELEGRAM_BOT_TOKEN");
@@ -28,4 +29,5 @@ export default {
   forceChannelIds,
   forceGroupIds,
   adminIds,
+  databaseUrl,
 };
