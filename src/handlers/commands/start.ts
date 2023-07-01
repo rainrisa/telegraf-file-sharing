@@ -26,7 +26,7 @@ export default async function startHandler(ctx: CommandContext) {
       );
     }
   }
-  const messageIds = database.getMessages(Number(shareId));
+  const messageIds = await database.getMessages(Number(shareId));
 
   if (!messageIds) {
     return ctx.reply("Message not found, try another link");

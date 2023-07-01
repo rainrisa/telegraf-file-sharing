@@ -4,6 +4,7 @@ import telegram from "./services/telegram.js";
 import commands from "./handlers/commands/index.js";
 import stage from "./scenes/index.js";
 import { session } from "telegraf";
+import database from "./services/database.js";
 
 const app = telegram.app;
 
@@ -14,6 +15,7 @@ app.command("start", commands.startHandler);
 app.command("share", commands.shareHandler);
 
 async function main() {
+  await database.initialize();
   await telegram.initialize();
 
   if (env.development) {

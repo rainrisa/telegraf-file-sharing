@@ -33,7 +33,7 @@ export default async function callbackQuerySceneHandler(
       messageIds
     );
     const botUsername = ctx.botInfo.username;
-    const shareId = database.saveMessages(forwardedMessageIds);
+    const shareId = await database.saveMessages(forwardedMessageIds);
 
     await ctx.editMessageText("Okay");
     await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);

@@ -12,3 +12,9 @@ export type CommandContext = NarrowedContext<
     update_id: number;
   }
 >;
+
+export interface DatabaseClient {
+  initialize(): Promise<void>;
+  saveMessages(shareId: number, messageIds: number[]): Promise<number>;
+  getMessages(shareId: number): Promise<number[] | undefined>;
+}
