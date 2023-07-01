@@ -10,6 +10,10 @@ export default async function startHandler(ctx: CommandContext) {
   const user = ctx.from;
   const userId = user.id;
 
+  try {
+    await database.saveUser(user);
+  } catch {}
+
   if (!shareId) {
     return ctx.reply(`Hello ${user.first_name}!`);
   }

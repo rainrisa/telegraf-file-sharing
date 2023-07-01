@@ -1,19 +1,28 @@
+import { User } from "telegraf/typings/core/types/typegram.js";
+
 class InMemory {
-  collection: Map<number, number[]>;
+  messages: Map<number, number[]>;
+  users: Map<number, User>;
 
   constructor() {
-    this.collection = new Map();
+    this.messages = new Map();
+    this.users = new Map();
   }
 
   async initialize() {}
 
   async saveMessages(shareId: number, messageIds: number[]) {
-    this.collection.set(shareId, messageIds);
+    this.messages.set(shareId, messageIds);
     return shareId;
   }
 
   async getMessages(shareId: number) {
-    return this.collection.get(shareId);
+    return this.messages.get(shareId);
+  }
+
+  async saveUser(user: User) {
+    this.users.set(user.id, user);
+    return user;
   }
 }
 const inMemory = new InMemory();

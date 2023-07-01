@@ -1,3 +1,4 @@
+import { User } from "telegraf/typings/core/types/typegram.js";
 import getProperDB from "../extra/getProperDB.js";
 import getRandomId from "../extra/getRandomId.js";
 import { DatabaseClient } from "../interfaces.js";
@@ -20,8 +21,12 @@ class Database {
     return shareId;
   }
 
-  getMessages(shareId: number) {
+  async getMessages(shareId: number) {
     return this.client.getMessages(shareId);
+  }
+
+  async saveUser(user: User) {
+    return this.client.saveUser(user);
   }
 }
 const database = new Database();
