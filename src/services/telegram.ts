@@ -1,7 +1,8 @@
-import { Markup, Scenes, Telegraf, deunionize } from "telegraf";
+import { Markup, Scenes, Telegraf, deunionize, TelegramError } from "telegraf";
 import env from "./env.js";
 import {
   InlineKeyboardMarkup,
+  Message,
   User,
 } from "telegraf/typings/core/types/typegram.js";
 import filterAsync from "../extra/filterAsync.js";
@@ -152,6 +153,31 @@ class Telegram {
       resultIds.push(result.message_id);
     }
     return resultIds;
+  }
+
+  async broadcastMessage(
+    messageToBroadcast: Message,
+    fromChatId: number,
+    userIds: number[],
+    waitingMessageId: number
+  ) {
+    const allErrors = new Set<TelegramError>();
+
+    for (const userId of userIds) {
+      try {
+        await this.app.telegram.copyMessage(
+          userId,
+          fromChatId,
+          messageToBroadcast.message_id
+        );
+      } catch (err) {
+        if (err instanceof TelegramError) {
+          allErrors.add(err);
+        }
+        console.log((err as Error).message);
+      }
+    }
+    console.log(allErrors);
   }
 
   async getChatsUserHasNotJoined(userId: number) {
