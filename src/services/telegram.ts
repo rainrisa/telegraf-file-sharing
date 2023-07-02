@@ -1,4 +1,4 @@
-import { Markup, Scenes, Telegraf } from "telegraf";
+import { Markup, Scenes, Telegraf, deunionize } from "telegraf";
 import env from "./env.js";
 import {
   InlineKeyboardMarkup,
@@ -166,9 +166,17 @@ class Telegram {
   }
 
   async getInviteLink(chatId: number) {
-    const existingInviteLink = this.inviteLinks.get(chatId);
+    const cachedInviteLink = this.inviteLinks.get(chatId);
+
+    if (cachedInviteLink) {
+      return cachedInviteLink;
+    }
+    const existingInviteLink = deunionize(
+      await this.app.telegram.getChat(chatId)
+    ).invite_link;
 
     if (existingInviteLink) {
+      this.inviteLinks.set(chatId, existingInviteLink);
       return existingInviteLink;
     }
     const inviteLink = await this.app.telegram.exportChatInviteLink(chatId);
