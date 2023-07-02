@@ -13,6 +13,7 @@ app.use(stage.middleware());
 
 app.command("start", commands.startHandler);
 app.command("share", commands.shareHandler);
+app.command("uptime", commands.uptimeHandler);
 
 async function main() {
   await database.initialize();

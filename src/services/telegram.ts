@@ -31,6 +31,10 @@ class Telegram {
         command: "share",
         description: "create new link",
       },
+      {
+        command: "uptime",
+        description: "check bot alive time",
+      },
     ]);
     const forceChatIds = [...env.forceChannelIds, ...env.forceGroupIds];
 
