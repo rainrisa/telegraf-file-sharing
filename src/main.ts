@@ -5,11 +5,13 @@ import commands from "./handlers/commands/index.js";
 import stage from "./scenes/index.js";
 import { session } from "telegraf";
 import database from "./services/database.js";
+import filters from "./filters.js";
 
 const app = telegram.app;
 
 app.use(session());
 app.use(stage.middleware());
+app.use(filters.private);
 
 app.command("start", commands.startHandler);
 app.command("share", commands.shareHandler);
