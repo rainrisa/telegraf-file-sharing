@@ -21,16 +21,16 @@ async function main() {
   await database.initialize();
   await telegram.initialize();
 
-  if (env.development) {
+  if (env.DEVELOPMENT) {
     app.launch();
   } else {
-    const domain = env.webhookDomain;
+    const domain = env.WEBHOOK_DOMAIN;
 
     if (!domain) {
       throw Error("Please provide WEBHOOK_DOMAIN");
     }
     const server = express();
-    const port = env.port;
+    const port = env.PORT;
 
     server.use(await app.createWebhook({ domain }));
     server.listen(port, () => console.log(`Server listening on ${port}`));

@@ -38,7 +38,7 @@ class MongoDB {
     this.db = mongoose;
     this.MessageModel = MessageModel;
     this.UserModel = UserModel;
-    this.databaseUrl = env.databaseUrl || "";
+    this.databaseUrl = env.DATABASE_URL || "";
   }
 
   async initialize() {

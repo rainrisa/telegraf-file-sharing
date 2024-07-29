@@ -1,8 +1,9 @@
+import toNumArr from "../extra/toNumArr.js";
 import env from "./env.js";
 
 class Auth {
   isAdmin(userId: number) {
-    return env.adminIds.includes(userId);
+    return toNumArr(env.ADMIN_IDS).includes(userId);
   }
 }
 const auth = new Auth();

@@ -4,7 +4,7 @@ import { DatabaseClient } from "../interfaces.js";
 import env from "../services/env.js";
 
 export default function getProperDB(): DatabaseClient {
-  const databaseUrl = env.databaseUrl;
+  const databaseUrl = env.DATABASE_URL;
 
   if (databaseUrl) {
     if (databaseUrl.startsWith("mongodb")) {

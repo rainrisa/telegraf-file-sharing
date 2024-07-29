@@ -28,7 +28,7 @@ export default async function callbackQuerySceneHandler(
       return ctx.editMessageText("You are not sending any message");
     }
     const forwardedMessageIds = await telegram.forwardMessages(
-      env.dbChannelId,
+      env.DB_CHANNEL_ID,
       chatId,
       messageIds,
     );

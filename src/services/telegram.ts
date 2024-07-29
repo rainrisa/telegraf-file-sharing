@@ -7,6 +7,7 @@ import {
 import filterAsync from "../extra/filterAsync.js";
 import mapAsync from "../extra/mapAsync.js";
 import splitArray from "../extra/splitArray.js";
+import toNumArr from "../extra/toNumArr.js";
 
 class Telegram {
   app: Telegraf<Scenes.SceneContext>;
@@ -17,7 +18,7 @@ class Telegram {
   inviteLinks: Map<number, string>;
 
   constructor() {
-    this.app = new Telegraf<Scenes.SceneContext>(env.token);
+    this.app = new Telegraf<Scenes.SceneContext>(env.TELEGRAM_BOT_TOKEN);
     this.messages = new Map();
     this.waitingMessageId = NaN;
     this.waitingMessageTimeout = setTimeout(() => {});
@@ -36,7 +37,10 @@ class Telegram {
         description: "check bot alive time",
       },
     ]);
-    const forceChatIds = [...env.forceChannelIds, ...env.forceGroupIds];
+    const forceChatIds = [
+      ...toNumArr(env.FORCE_CHANNEL_IDS),
+      ...toNumArr(env.FORCE_GROUP_IDS),
+    ];
 
     await mapAsync(
       forceChatIds,
@@ -146,7 +150,10 @@ class Telegram {
   }
 
   async getChatsUserHasNotJoined(userId: number) {
-    const chatIds = [...env.forceChannelIds, ...env.forceGroupIds];
+    const chatIds = [
+      ...toNumArr(env.FORCE_GROUP_IDS),
+      ...toNumArr(env.FORCE_CHANNEL_IDS),
+    ];
 
     return filterAsync(
       chatIds,

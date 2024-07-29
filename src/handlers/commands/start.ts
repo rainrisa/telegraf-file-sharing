@@ -34,5 +34,5 @@ export default async function startHandler(ctx: CommandContext) {
   if (!messageIds) {
     return ctx.reply("Message not found, try another link");
   }
-  await telegram.forwardMessages(chatId, env.dbChannelId, messageIds);
+  await telegram.forwardMessages(chatId, env.DB_CHANNEL_ID, messageIds);
 }
