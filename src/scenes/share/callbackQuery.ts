@@ -9,7 +9,7 @@ export default async function callbackQuerySceneHandler(
   ctx: NarrowedContext<
     Scenes.SceneContext<Scenes.SceneSessionData>,
     Update.CallbackQueryUpdate<CallbackQuery>
-  >
+  >,
 ) {
   const chatId = ctx.chat?.id;
 
@@ -30,7 +30,7 @@ export default async function callbackQuerySceneHandler(
     const forwardedMessageIds = await telegram.forwardMessages(
       env.dbChannelId,
       chatId,
-      messageIds
+      messageIds,
     );
     const botUsername = ctx.botInfo.username;
     const shareId = await database.saveMessages(forwardedMessageIds);

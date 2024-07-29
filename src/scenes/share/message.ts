@@ -6,7 +6,7 @@ export default async function messageSceneHandler(
   ctx: NarrowedContext<
     Scenes.SceneContext<Scenes.SceneSessionData>,
     Update.MessageUpdate<Message>
-  >
+  >,
 ) {
   const chatId = ctx.chat.id;
   const userMessageId = ctx.message.message_id;

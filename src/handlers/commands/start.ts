@@ -18,15 +18,14 @@ export default async function startHandler(ctx: CommandContext) {
     return ctx.reply(`Hello ${user.first_name}!`);
   }
   if (!auth.isAdmin(userId)) {
-    const chatsUserHasNotJoined = await telegram.getChatsUserHasNotJoined(
-      userId
-    );
+    const chatsUserHasNotJoined =
+      await telegram.getChatsUserHasNotJoined(userId);
     if (chatsUserHasNotJoined.length) {
       return telegram.sendForceJoinMessage(
         shareId,
         chatId,
         user,
-        chatsUserHasNotJoined
+        chatsUserHasNotJoined,
       );
     }
   }

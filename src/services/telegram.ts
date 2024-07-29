@@ -40,7 +40,7 @@ class Telegram {
 
     await mapAsync(
       forceChatIds,
-      async (chatId) => await this.getInviteLink(chatId)
+      async (chatId) => await this.getInviteLink(chatId),
     );
   }
 
@@ -76,14 +76,14 @@ class Telegram {
     shareId: number,
     chatId: number,
     user: User,
-    chatsUserHasNotJoined: number[]
+    chatsUserHasNotJoined: number[],
   ) {
     const text =
       `Hello ${user.first_name}\n` +
       `you must join all the groups/channels below first`;
     const replyMarkup = await this.getForceChatButtons(
       shareId,
-      chatsUserHasNotJoined
+      chatsUserHasNotJoined,
     );
     await this.app.telegram.sendMessage(chatId, text, {
       reply_markup: replyMarkup,
@@ -100,14 +100,14 @@ class Telegram {
         const inviteLink = await this.getInviteLink(chatId);
 
         return Markup.button.url(label, inviteLink);
-      }
+      },
     );
     const forceChatButtons = splitArray(rawButtons, limitPerRow);
 
     forceChatButtons.push([
       Markup.button.url(
         "Try again",
-        `https://t.me/${this.app.botInfo?.username}?start=${shareId}`
+        `https://t.me/${this.app.botInfo?.username}?start=${shareId}`,
       ),
     ]);
     return {
@@ -130,7 +130,7 @@ class Telegram {
   async forwardMessages(
     toChatId: number,
     fromChatId: number,
-    messageIds: number[]
+    messageIds: number[],
   ) {
     const resultIds: number[] = [];
 
@@ -138,7 +138,7 @@ class Telegram {
       const result = await this.app.telegram.copyMessage(
         toChatId,
         fromChatId,
-        messageId
+        messageId,
       );
       resultIds.push(result.message_id);
     }
@@ -150,7 +150,7 @@ class Telegram {
 
     return filterAsync(
       chatIds,
-      async (chatId) => !(await this.alreadyJoinChat(chatId, userId))
+      async (chatId) => !(await this.alreadyJoinChat(chatId, userId)),
     );
   }
 
@@ -172,7 +172,7 @@ class Telegram {
       return cachedInviteLink;
     }
     const existingInviteLink = deunionize(
-      await this.app.telegram.getChat(chatId)
+      await this.app.telegram.getChat(chatId),
     ).invite_link;
 
     if (existingInviteLink) {

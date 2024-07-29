@@ -13,7 +13,7 @@ export const MessageModel = model<MessageDocument>(
   new Schema({
     shareId: { type: Number, required: true, unique: true },
     messageIds: { type: [Number], required: true },
-  })
+  }),
 );
 export const UserModel = model<UserDocument>(
   "user",
@@ -26,7 +26,7 @@ export const UserModel = model<UserDocument>(
     language_code: { type: String },
     is_premium: { type: Boolean },
     added_to_attachment_menu: { type: Boolean },
-  })
+  }),
 );
 class MongoDB {
   db: typeof mongoose;
