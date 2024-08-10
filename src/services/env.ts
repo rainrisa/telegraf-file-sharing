@@ -11,6 +11,7 @@ const env = cleanEnv(process.env, {
   FORCE_GROUP_IDS: str({ default: undefined }),
   ADMIN_IDS: str(),
   DATABASE_URL: str({ default: undefined }),
+  NO_FORWARD: bool({ default: undefined }),
 });
 
 export default env;

@@ -11,6 +11,7 @@ This repository is based on [File Sharing Bot](https://github.com/CodeXBotz/File
 - Support db (MongoDB) and no db (in memory), just in case you want to quickly share some files without the need of database
 - Multiple admins
 - Have short urls, for example: `https://t.me/your_bot?start=2781253471`
+- Enable/disable forwarding
 
 ## Notes
 
@@ -19,7 +20,6 @@ Currently it lacks some features like:
 - Broadcast, I haven't tried to broadcast yet so I still have to find out what type of errors might be triggered. Because unlike Pyrogram, Telegraf doesn't have any custom error types
 - Redis, i don't know, maybe some people just prefer using this one instead of MongoDB
 - No customisable, currently you are still required to edit the code directly in order to customize
-- No protected content, maybe in version 2 i will implement this
 - No bot stats, but you can still look directly all the users that has started your bot on your database, if you use one
 
 ## Usage
@@ -35,6 +35,7 @@ Currently it lacks some features like:
 - `ADMIN_IDS`, _required_, fill least one admin
 - `DATABASE_URL`, _optional_, fill this with your MongoDB uri if you want to use a database, if not, all data will stored in RAM
 - `DEVELOPMENT`, _optional_, set `true` if you are on local so you don't have to setup a web server. Also set this `true` if you want to use long polling instead of webhook
+- `NO_FORWARD`, _optional_, set `true` if you want to disable forwarding
 
 You don't need to set `API_ID` and `API_HASH` because this is not an MTProto bot. You probably want to read [this](https://docs.pyrogram.org/topics/mtproto-vs-botapi) as a reference
 

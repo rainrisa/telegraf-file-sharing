@@ -143,6 +143,7 @@ class Telegram {
         toChatId,
         fromChatId,
         messageId,
+        { protect_content: env.NO_FORWARD },
       );
       resultIds.push(result.message_id);
     }
