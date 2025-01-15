@@ -28,6 +28,10 @@ class Database {
   async saveUser(user: User) {
     return this.client.saveUser(user);
   }
+
+  async getTotalUsers() {
+    return this.client.getTotalUsers();
+  }
 }
 const database = new Database();
 

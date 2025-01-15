@@ -33,6 +33,10 @@ class Telegram {
         description: "create new link",
       },
       {
+        command: "users",
+        description: "get total users",
+      },
+      {
         command: "uptime",
         description: "check bot alive time",
       },

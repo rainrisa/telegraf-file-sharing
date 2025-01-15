@@ -62,6 +62,10 @@ class MongoDB {
     await new this.UserModel(user).save();
     return user;
   }
+
+  async getTotalUsers() {
+    return this.UserModel.count();
+  }
 }
 const mongoDB = new MongoDB();
 

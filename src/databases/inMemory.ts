@@ -24,6 +24,10 @@ class InMemory {
     this.users.set(user.id, user);
     return user;
   }
+
+  async getTotalUsers() {
+    return this.users.size;
+  }
 }
 const inMemory = new InMemory();
 

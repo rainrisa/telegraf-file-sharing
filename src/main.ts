@@ -16,6 +16,7 @@ app.use(filters.private);
 app.command("start", commands.startHandler);
 app.command("share", commands.shareHandler);
 app.command("uptime", commands.uptimeHandler);
+app.command("users", commands.usersHandler);
 
 async function main() {
   await database.initialize();
