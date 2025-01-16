@@ -12,6 +12,7 @@ This repository is based on [File Sharing Bot](https://github.com/CodeXBotz/File
 - Multiple admins
 - Have short urls, for example: `https://t.me/your_bot?start=2781253471`
 - Enable/disable forwarding
+- Bot stats (total users)
 
 ## Notes
 
@@ -20,7 +21,6 @@ Currently it lacks some features like:
 - Broadcast, I haven't tried to broadcast yet so I still have to find out what type of errors might be triggered. Because unlike Pyrogram, Telegraf doesn't have any custom error types
 - Redis, i don't know, maybe some people just prefer using this one instead of MongoDB
 - No customisable, currently you are still required to edit the code directly in order to customize
-- No bot stats, but you can still look directly all the users that has started your bot on your database, if you use one
 
 ## Usage
 
