@@ -2,13 +2,15 @@ import { Markup, Scenes, Telegraf, deunionize, TelegramError } from "telegraf";
 import env from "./env.js";
 import {
   InlineKeyboardMarkup,
-  Message,
   User,
 } from "telegraf/typings/core/types/typegram.js";
 import filterAsync from "../extra/filterAsync.js";
 import mapAsync from "../extra/mapAsync.js";
 import splitArray from "../extra/splitArray.js";
 import toNumArr from "../extra/toNumArr.js";
+import database from "./database.js";
+import { BroadcastStatus as Status } from "../interfaces.js";
+import { Broadcast } from "./broadcast.js";
 
 class Telegram {
   app: Telegraf<Scenes.SceneContext>;
@@ -155,29 +157,31 @@ class Telegram {
     return resultIds;
   }
 
-  async broadcastMessage(
-    messageToBroadcast: Message,
-    fromChatId: number,
-    userIds: number[],
-    waitingMessageId: number
+  async sendBroadcast(
+    chat: string | number,
+    fromChat: string | number,
+    messageId: number,
   ) {
-    const allErrors = new Set<TelegramError>();
+    try {
+      await this.app.telegram.copyMessage(chat, fromChat, messageId);
+      return Status.SUCCESS;
+    } catch (err) {
+      if (err instanceof TelegramError) {
+        const desc = err.response.description;
 
-    for (const userId of userIds) {
-      try {
-        await this.app.telegram.copyMessage(
-          userId,
-          fromChatId,
-          messageToBroadcast.message_id
-        );
-      } catch (err) {
-        if (err instanceof TelegramError) {
-          allErrors.add(err);
+        if (desc === "Forbidden: user is deactivated") {
+          return Status.DEACTIVATED;
+        } else if (desc === "Forbidden: bot was blocked by the user") {
+          return Status.BLOCKED;
         }
-        console.log((err as Error).message);
       }
+      console.log((err as Error).message);
+      return Status.OTHER_ERRORS;
     }
-    console.log(allErrors);
+  }
+
+  async broadcastMessage(messageId: number, fromChat: string | number) {
+    await new Broadcast(this.app).broadcastMessage(messageId, fromChat);
   }
 
   async getChatsUserHasNotJoined(userId: number) {

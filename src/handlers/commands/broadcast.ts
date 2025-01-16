@@ -14,16 +14,13 @@ export default async function broadcastHandler(ctx: CommandContext) {
   if (!messageToBroadcast) {
     return ctx.reply("Reply to any message you want to broadcast");
   }
-  // const userIds = await database.
-  const userIds = [1, 2, 3];
-  const totalUsers = userIds.length;
+  const totalUsers = await database.getTotalUsers();
   const waitingMessage = await ctx.reply(
     `Broadcasting message to ${totalUsers} user\n` + `This will take some time`
   );
   await telegram.broadcastMessage(
-    messageToBroadcast,
+    messageToBroadcast.message_id,
     userId,
-    userIds,
-    waitingMessage.message_id
+    // waitingMessage.message_id,
   );
 }
