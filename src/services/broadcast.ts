@@ -1,8 +1,8 @@
 import { Scenes, Telegraf, TelegramError } from "telegraf";
 import { BroadcastStatus as Status } from "../interfaces.js";
 import database from "./database.js";
-import { User } from "telegraf/typings/core/types/typegram.js";
 import sleep from "../extra/sleep.js";
+import { format } from "date-fns";
 
 export class Broadcast {
   bot: Telegraf<Scenes.SceneContext>;
@@ -17,6 +17,24 @@ export class Broadcast {
     this.deactivated = 0;
     this.blocked = 0;
     this.otherErrors = 0;
+  }
+
+  getStats() {
+    const lastUpdated = format(new Date(), "MM/dd/yyyy HH:mm:ss");
+
+    return (
+      "BROADCAST STATS\n\n" +
+      "Success: " +
+      this.success +
+      "\nDeactivated: " +
+      this.deactivated +
+      "\nBlocked: " +
+      this.blocked +
+      "\nOther Errors: " +
+      this.otherErrors +
+      "\n\nLast Updated: " +
+      lastUpdated
+    );
   }
 
   getResult() {
@@ -56,6 +74,7 @@ export class Broadcast {
   }
 
   async broadcastMessage(messageId: number, fromChat: string | number) {
+    console.time("broadcast");
     // https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
     let broadcastPerSecond = 30;
     const broadcasts = [];
@@ -66,14 +85,15 @@ export class Broadcast {
 
       if (broadcasts.length > broadcastPerSecond) {
         await Promise.all(broadcasts);
-        console.log(this.getResult());
+        console.log(this.getStats());
         broadcasts.length = 0;
         await sleep(1000);
       }
     }
     console.log("LAST!!");
     await Promise.all(broadcasts);
-    console.log(this.getResult());
+    console.log(this.getStats());
     console.log("DONE!!");
+    console.timeEnd("broadcast");
   }
 }

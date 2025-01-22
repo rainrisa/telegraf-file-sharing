@@ -1,0 +1,3 @@
+also implement broadcast test but for production
+instead of sending to all users it should send only to env.ADMIN_IDS
+

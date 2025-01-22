@@ -157,29 +157,6 @@ class Telegram {
     return resultIds;
   }
 
-  async sendBroadcast(
-    chat: string | number,
-    fromChat: string | number,
-    messageId: number,
-  ) {
-    try {
-      await this.app.telegram.copyMessage(chat, fromChat, messageId);
-      return Status.SUCCESS;
-    } catch (err) {
-      if (err instanceof TelegramError) {
-        const desc = err.response.description;
-
-        if (desc === "Forbidden: user is deactivated") {
-          return Status.DEACTIVATED;
-        } else if (desc === "Forbidden: bot was blocked by the user") {
-          return Status.BLOCKED;
-        }
-      }
-      console.log((err as Error).message);
-      return Status.OTHER_ERRORS;
-    }
-  }
-
   async broadcastMessage(messageId: number, fromChat: string | number) {
     await new Broadcast(this.app).broadcastMessage(messageId, fromChat);
   }
