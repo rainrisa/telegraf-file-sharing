@@ -1,4 +1,4 @@
-import { Markup, Scenes, Telegraf, deunionize, TelegramError } from "telegraf";
+import { deunionize, Markup, Scenes, Telegraf, TelegramError } from "telegraf";
 import env from "./env.js";
 import {
   InlineKeyboardMarkup,
@@ -8,9 +8,6 @@ import filterAsync from "../extra/filterAsync.js";
 import mapAsync from "../extra/mapAsync.js";
 import splitArray from "../extra/splitArray.js";
 import toNumArr from "../extra/toNumArr.js";
-import database from "./database.js";
-import { BroadcastStatus as Status } from "../interfaces.js";
-import { Broadcast } from "./broadcast.js";
 
 class Telegram {
   app: Telegraf<Scenes.SceneContext>;
@@ -155,10 +152,6 @@ class Telegram {
       resultIds.push(result.message_id);
     }
     return resultIds;
-  }
-
-  async broadcastMessage(messageId: number, fromChat: string | number) {
-    await new Broadcast(this.app).broadcastMessage(messageId, fromChat);
   }
 
   async getChatsUserHasNotJoined(userId: number) {

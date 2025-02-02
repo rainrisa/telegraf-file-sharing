@@ -10,6 +10,8 @@ export class Broadcast {
   deactivated: number;
   blocked: number;
   otherErrors: number;
+  totalSent: number;
+  totalUsers: number;
 
   constructor(bot: Telegraf<Scenes.SceneContext>) {
     this.bot = bot;
@@ -17,6 +19,8 @@ export class Broadcast {
     this.deactivated = 0;
     this.blocked = 0;
     this.otherErrors = 0;
+    this.totalSent = 0;
+    this.totalUsers = 0;
   }
 
   getStats() {
@@ -32,7 +36,8 @@ export class Broadcast {
       this.blocked +
       "\nOther Errors: " +
       this.otherErrors +
-      "\n\nLast Updated: " +
+      `\n\nBroadcasted to ${this.totalSent}/${this.totalUsers} users` +
+      "\nLast Updated: " +
       lastUpdated
     );
   }
@@ -70,30 +75,26 @@ export class Broadcast {
       console.log((err as Error).message);
       this.otherErrors++;
       return Status.OTHER_ERRORS;
+    } finally {
+      this.totalSent++;
     }
   }
 
   async broadcastMessage(messageId: number, fromChat: string | number) {
-    console.time("broadcast");
     // https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
     let broadcastPerSecond = 30;
     const broadcasts = [];
+    this.totalUsers = await database.getTotalUsers();
 
     for await (const user of database.getAllUsers()) {
-      console.log(user.first_name);
       broadcasts.push(this.sendBroadcast(user.id, fromChat, messageId));
 
       if (broadcasts.length > broadcastPerSecond) {
         await Promise.all(broadcasts);
-        console.log(this.getStats());
         broadcasts.length = 0;
         await sleep(1000);
       }
     }
-    console.log("LAST!!");
     await Promise.all(broadcasts);
-    console.log(this.getStats());
-    console.log("DONE!!");
-    console.timeEnd("broadcast");
   }
 }

@@ -12,6 +12,7 @@ const env = cleanEnv(process.env, {
   ADMIN_IDS: str(),
   DATABASE_URL: str({ default: undefined }),
   NO_FORWARD: bool({ default: undefined }),
+  BROADCAST_LOG_DELAY: num({ default: undefined }),
 });
 
 export default env;

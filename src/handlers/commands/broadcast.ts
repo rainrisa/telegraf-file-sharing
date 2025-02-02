@@ -1,6 +1,8 @@
 import { CommandContext } from "../../interfaces.js";
 import auth from "../../services/auth.js";
+import { Broadcast } from "../../services/broadcast.js";
 import database from "../../services/database.js";
+import env from "../../services/env.js";
 import telegram from "../../services/telegram.js";
 
 export default async function broadcastHandler(ctx: CommandContext) {
@@ -15,12 +17,23 @@ export default async function broadcastHandler(ctx: CommandContext) {
     return ctx.reply("Reply to any message you want to broadcast");
   }
   const totalUsers = await database.getTotalUsers();
-  const waitingMessage = await ctx.reply(
-    `Broadcasting message to ${totalUsers} user\n` + `This will take some time`
+  const chatId = ctx.chat.id;
+  const sendLogDelay = env.BROADCAST_LOG_DELAY || 10000;
+  const broadcast = new Broadcast(telegram.app);
+  const m = await ctx.reply(
+    `Broadcasting message to ${totalUsers} user\n` + `This will take some time`,
   );
-  await telegram.broadcastMessage(
-    messageToBroadcast.message_id,
-    userId,
-    // waitingMessage.message_id,
-  );
+  const sendLog = async () => {
+    await ctx.telegram.editMessageText(
+      chatId,
+      m.message_id,
+      undefined,
+      broadcast.getStats(),
+    );
+  };
+  const logInterval = setInterval(sendLog, sendLogDelay);
+  await broadcast.broadcastMessage(messageToBroadcast.message_id, userId);
+
+  clearInterval(logInterval);
+  await sendLog();
 }

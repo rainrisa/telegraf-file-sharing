@@ -1,3 +1,6 @@
 also implement broadcast test but for production
 instead of sending to all users it should send only to env.ADMIN_IDS
 
+also on finish, calculate the time of the broadcast 
+for example: time takes: 1h 5m 41s
+
