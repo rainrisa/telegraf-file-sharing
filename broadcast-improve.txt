@@ -1,0 +1,5 @@
+button to cancel and stop
+
+cancel: should stop broadcast and delete all previous messages that being sent 
+stop: just stop the broadcast without deleting successful message
+

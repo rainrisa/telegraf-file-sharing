@@ -14,14 +14,15 @@ export default async function broadcastHandler(ctx: CommandContext) {
   const messageToBroadcast = ctx.message.reply_to_message;
 
   if (!messageToBroadcast) {
-    return ctx.reply("Reply to any message you want to broadcast");
+    return ctx.reply("Reply to the message you want to broadcast");
   }
   const totalUsers = await database.getTotalUsers();
   const chatId = ctx.chat.id;
   const sendLogDelay = env.BROADCAST_LOG_DELAY || 10000;
   const broadcast = new Broadcast(telegram.app);
   const m = await ctx.reply(
-    `Broadcasting message to ${totalUsers} user\n` + `This will take some time`,
+    `Broadcasting message to ${totalUsers} user\n` +
+      `This will take some time..`,
   );
   const sendLog = async () => {
     await ctx.telegram.editMessageText(
@@ -29,6 +30,9 @@ export default async function broadcastHandler(ctx: CommandContext) {
       m.message_id,
       undefined,
       broadcast.getStats(),
+      {
+        parse_mode: "MarkdownV2",
+      },
     );
   };
   const logInterval = setInterval(sendLog, sendLogDelay);

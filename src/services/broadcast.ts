@@ -12,6 +12,7 @@ export class Broadcast {
   otherErrors: number;
   totalSent: number;
   totalUsers: number;
+  done: boolean;
 
   constructor(bot: Telegraf<Scenes.SceneContext>) {
     this.bot = bot;
@@ -21,24 +22,32 @@ export class Broadcast {
     this.otherErrors = 0;
     this.totalSent = 0;
     this.totalUsers = 0;
+    this.done = false;
   }
 
   getStats() {
-    const lastUpdated = format(new Date(), "MM/dd/yyyy HH:mm:ss");
+    const lastUpdated = format(new Date(), "HH:mm:ss");
+    const broadcastTitle = this.done
+      ? "BROADCAST DONE"
+      : "BROADCAST IN PROGRESS";
+    const code = (x: string | number) => "`" + x + "`";
 
     return (
-      "BROADCAST STATS\n\n" +
+      broadcastTitle +
+      "\n\n" +
       "Success: " +
-      this.success +
+      code(this.success) +
       "\nDeactivated: " +
-      this.deactivated +
+      code(this.deactivated) +
       "\nBlocked: " +
-      this.blocked +
+      code(this.blocked) +
       "\nOther Errors: " +
-      this.otherErrors +
-      `\n\nBroadcasted to ${this.totalSent}/${this.totalUsers} users` +
+      code(this.otherErrors) +
+      `\n\nBroadcasted to ${code(
+        this.totalSent + "/" + this.totalUsers,
+      )} users` +
       "\nLast Updated: " +
-      lastUpdated
+      code(lastUpdated)
     );
   }
 
@@ -96,5 +105,6 @@ export class Broadcast {
       }
     }
     await Promise.all(broadcasts);
+    this.done = true;
   }
 }

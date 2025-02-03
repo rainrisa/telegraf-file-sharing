@@ -1,4 +1,4 @@
-import { deunionize, Markup, Scenes, Telegraf, TelegramError } from "telegraf";
+import { deunionize, Markup, Scenes, Telegraf } from "telegraf";
 import env from "./env.js";
 import {
   InlineKeyboardMarkup,
@@ -32,6 +32,11 @@ class Telegram {
         command: "share",
         description: "create new link",
       },
+      {
+        command: "broadcast",
+        description: "broadcast message to users",
+      },
+
       {
         command: "users",
         description: "get total users",
