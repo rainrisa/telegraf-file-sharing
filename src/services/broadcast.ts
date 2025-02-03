@@ -50,15 +50,6 @@ export class Broadcast {
     );
   }
 
-  getResult() {
-    return {
-      success: this.success,
-      deactivated: this.deactivated,
-      blocked: this.blocked,
-      otherErrors: this.otherErrors,
-    };
-  }
-
   async sendBroadcast(
     chat: string | number,
     fromChat: string | number,
