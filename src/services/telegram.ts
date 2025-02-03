@@ -1,4 +1,4 @@
-import { deunionize, Markup, Scenes, Telegraf } from "telegraf";
+import { Markup, Scenes, Telegraf, deunionize } from "telegraf";
 import env from "./env.js";
 import {
   InlineKeyboardMarkup,

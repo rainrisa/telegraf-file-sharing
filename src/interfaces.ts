@@ -21,10 +21,3 @@ export interface DatabaseClient {
   getTotalUsers(): Promise<number>;
   getAllUsers(): AsyncGenerator<User>;
 }
-
-export enum BroadcastStatus {
-  SUCCESS,
-  DEACTIVATED,
-  BLOCKED,
-  OTHER_ERRORS,
-}

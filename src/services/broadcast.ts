@@ -1,5 +1,4 @@
 import { Scenes, Telegraf, TelegramError } from "telegraf";
-import { BroadcastStatus as Status } from "../interfaces.js";
 import database from "./database.js";
 import sleep from "../extra/sleep.js";
 import { format } from "date-fns";
@@ -68,22 +67,20 @@ export class Broadcast {
     try {
       await this.bot.telegram.copyMessage(chat, fromChat, messageId);
       this.success++;
-      return Status.SUCCESS;
     } catch (err) {
       if (err instanceof TelegramError) {
         const desc = err.response.description;
 
         if (desc === "Forbidden: user is deactivated") {
           this.deactivated++;
-          return Status.DEACTIVATED;
+          return; // Exit early, but `finally` will still run
         } else if (desc === "Forbidden: bot was blocked by the user") {
           this.blocked++;
-          return Status.BLOCKED;
+          return; // Exit early, but `finally` will still run
         }
       }
       console.log((err as Error).message);
       this.otherErrors++;
-      return Status.OTHER_ERRORS;
     } finally {
       this.totalSent++;
     }
