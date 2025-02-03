@@ -66,6 +66,26 @@ class MongoDB {
   async getTotalUsers() {
     return this.UserModel.count();
   }
+
+  async *getAllUsers() {
+    const totalUsers = await this.getTotalUsers();
+    let cursor = 0;
+    let remaining = totalUsers;
+    const limit = 100;
+
+    while (remaining > 0) {
+      const users = await this.UserModel.find({}, undefined, {
+        skip: cursor,
+        limit,
+      });
+      cursor += limit;
+      remaining -= limit;
+
+      for (const user of users) {
+        yield user;
+      }
+    }
+  }
 }
 const mongoDB = new MongoDB();
 

@@ -28,6 +28,12 @@ class InMemory {
   async getTotalUsers() {
     return this.users.size;
   }
+
+  async *getAllUsers() {
+    for (const [id, user] of this.users) {
+      yield user;
+    }
+  }
 }
 const inMemory = new InMemory();
 

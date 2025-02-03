@@ -19,4 +19,5 @@ export interface DatabaseClient {
   getMessages(shareId: number): Promise<number[] | undefined>;
   saveUser(user: User): Promise<User>;
   getTotalUsers(): Promise<number>;
+  getAllUsers(): AsyncGenerator<User>;
 }

@@ -32,6 +32,12 @@ class Database {
   async getTotalUsers() {
     return this.client.getTotalUsers();
   }
+
+  async *getAllUsers() {
+    for await (const user of this.client.getAllUsers()) {
+      yield user;
+    }
+  }
 }
 const database = new Database();
 

@@ -15,6 +15,7 @@ app.use(filters.private);
 
 app.command("start", commands.startHandler);
 app.command("share", commands.shareHandler);
+app.command("broadcast", commands.broadcastHandler);
 app.command("uptime", commands.uptimeHandler);
 app.command("users", commands.usersHandler);
 

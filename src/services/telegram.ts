@@ -33,6 +33,11 @@ class Telegram {
         description: "create new link",
       },
       {
+        command: "broadcast",
+        description: "broadcast message to users",
+      },
+
+      {
         command: "users",
         description: "get total users",
       },
