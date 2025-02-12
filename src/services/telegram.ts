@@ -46,13 +46,9 @@ class Telegram {
         description: "check bot alive time",
       },
     ]);
-    const forceChatIds = [
-      ...toNumArr(env.FORCE_CHANNEL_IDS),
-      ...toNumArr(env.FORCE_GROUP_IDS),
-    ];
 
     await mapAsync(
-      forceChatIds,
+      env.FORCE_SUB_IDS,
       async (chatId) => await this.getInviteLink(chatId),
     );
   }
@@ -160,13 +156,8 @@ class Telegram {
   }
 
   async getChatsUserHasNotJoined(userId: number) {
-    const chatIds = [
-      ...toNumArr(env.FORCE_GROUP_IDS),
-      ...toNumArr(env.FORCE_CHANNEL_IDS),
-    ];
-
     return filterAsync(
-      chatIds,
+      env.FORCE_SUB_IDS,
       async (chatId) => !(await this.alreadyJoinChat(chatId, userId)),
     );
   }
