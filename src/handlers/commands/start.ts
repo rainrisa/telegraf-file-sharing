@@ -15,7 +15,7 @@ export default async function startHandler(ctx: CommandContext) {
   } catch {}
 
   if (!shareId) {
-    return ctx.reply(`Hello ${user.first_name}!`);
+    return telegram.sendMessage(chatId, `Hello ${user.first_name}!`);
   }
   if (!auth.isAdmin(userId)) {
     const chatsUserHasNotJoined =
@@ -32,7 +32,7 @@ export default async function startHandler(ctx: CommandContext) {
   const messageIds = await database.getMessages(Number(shareId));
 
   if (!messageIds) {
-    return ctx.reply("Message not found, try another link");
+    return telegram.sendMessage(chatId, "Message not found, try another link");
   }
   await telegram.forwardMessages(chatId, env.DB_CHANNEL_ID, messageIds);
 }

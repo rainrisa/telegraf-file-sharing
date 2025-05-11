@@ -1,5 +1,6 @@
 import { CommandContext } from "../../interfaces.js";
 import globalState from "../../services/globalState.js";
+import telegram from "../../services/telegram.js";
 
 export default async function uptimeHandler(ctx: CommandContext) {
   let uptimeTotal = Math.abs(Date.now() - globalState.startTime) / 1000;
@@ -18,5 +19,5 @@ export default async function uptimeHandler(ctx: CommandContext) {
   } else {
     uptimeMessage = `${uptimeSeconds}s`;
   }
-  return ctx.reply(uptimeMessage);
+  return telegram.sendMessage(ctx.chat.id, uptimeMessage);
 }

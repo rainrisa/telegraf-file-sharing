@@ -8,6 +8,7 @@ import filterAsync from "../extra/filterAsync.js";
 import mapAsync from "../extra/mapAsync.js";
 import splitArray from "../extra/splitArray.js";
 import toNumArr from "../extra/toNumArr.js";
+import { ExtraReplyMessage } from "telegraf/typings/telegram-types.js";
 
 class Telegram {
   app: Telegraf<Scenes.SceneContext>;
@@ -69,9 +70,12 @@ class Telegram {
         await this.deleteWaitingMessage(chatId);
       } catch {}
 
-      const waitingMessage = await this.app.telegram.sendMessage(chatId, text, {
+      const waitingMessage = await this.sendMessage(chatId, text, {
         reply_markup: replyMarkup,
       });
+      if (!waitingMessage) {
+        return;
+      }
       this.waitingMessageId = waitingMessage.message_id;
       this.firstWaitingMessage = false;
     }, delay);
@@ -94,7 +98,7 @@ class Telegram {
       shareId,
       chatsUserHasNotJoined,
     );
-    await this.app.telegram.sendMessage(chatId, text, {
+    await this.sendMessage(chatId, text, {
       reply_markup: replyMarkup,
     });
   }
@@ -144,13 +148,20 @@ class Telegram {
     const resultIds: number[] = [];
 
     for (const messageId of messageIds) {
-      const result = await this.app.telegram.copyMessage(
-        toChatId,
-        fromChatId,
-        messageId,
-        { protect_content: env.NO_FORWARD },
-      );
-      resultIds.push(result.message_id);
+      try {
+        const result = await this.app.telegram.copyMessage(
+          toChatId,
+          fromChatId,
+          messageId,
+          { protect_content: env.NO_FORWARD },
+        );
+        resultIds.push(result.message_id);
+      } catch (error) {
+        console.error(
+          `Failed to copy message ${messageId} from ${fromChatId} to ${toChatId}:`,
+          error,
+        );
+      }
     }
     return resultIds;
   }
@@ -191,6 +202,15 @@ class Telegram {
     this.inviteLinks.set(chatId, inviteLink);
 
     return inviteLink;
+  }
+
+  async sendMessage(chatId: number, text: string, extra?: ExtraReplyMessage) {
+    try {
+      const message = await this.app.telegram.sendMessage(chatId, text, extra);
+      return message;
+    } catch (error) {
+      console.error(`Failed to send message to ${chatId}:`, error);
+    }
   }
 }
 const telegram = new Telegram();
