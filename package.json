@@ -23,5 +23,6 @@
     "express": "^4.21.2",
     "mongoose": "^7.3.1",
     "telegraf": "^4.12.2"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
