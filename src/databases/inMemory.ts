@@ -1,4 +1,5 @@
 import { User } from "telegraf/typings/core/types/typegram.js";
+import { GetAllUsersOptions } from "../interfaces";
 
 class InMemory {
   messages: Map<number, number[]>;
@@ -29,8 +30,21 @@ class InMemory {
     return this.users.size;
   }
 
-  async *getAllUsers() {
-    for (const [id, user] of this.users) {
+  async *getAllUsers(options?: GetAllUsersOptions) {
+    const offset = options?.offset || 0;
+    const limit = options?.limit || Infinity;
+
+    let skipped = 0;
+    let yielded = 0;
+
+    for (const user of this.users.values()) {
+      if (skipped < offset) {
+        skipped++;
+        continue;
+      }
+      if (yielded >= limit) break;
+
+      yielded++;
       yield user;
     }
   }

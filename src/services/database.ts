@@ -1,7 +1,7 @@
 import { User } from "telegraf/typings/core/types/typegram.js";
 import getProperDB from "../extra/getProperDB.js";
 import getRandomId from "../extra/getRandomId.js";
-import { DatabaseClient } from "../interfaces.js";
+import { DatabaseClient, GetAllUsersOptions } from "../interfaces.js";
 
 class Database {
   client: DatabaseClient;
@@ -33,8 +33,8 @@ class Database {
     return this.client.getTotalUsers();
   }
 
-  async *getAllUsers() {
-    for await (const user of this.client.getAllUsers()) {
+  async *getAllUsers(options?: GetAllUsersOptions) {
+    for await (const user of this.client.getAllUsers(options)) {
       yield user;
     }
   }

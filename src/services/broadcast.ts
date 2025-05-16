@@ -2,6 +2,7 @@ import { Scenes, Telegraf, TelegramError } from "telegraf";
 import database from "./database.js";
 import sleep from "../extra/sleep.js";
 import { format } from "date-fns";
+import { BroadcastOptions } from "../interfaces.js";
 
 export class Broadcast {
   bot: Telegraf<Scenes.SceneContext>;
@@ -77,13 +78,17 @@ export class Broadcast {
     }
   }
 
-  async broadcastMessage(messageId: number, fromChat: string | number) {
+  async broadcastMessage(
+    messageId: number,
+    fromChat: string | number,
+    options?: BroadcastOptions,
+  ) {
     // https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
     let broadcastPerSecond = 30;
     const broadcasts = [];
     this.totalUsers = await database.getTotalUsers();
 
-    for await (const user of database.getAllUsers()) {
+    for await (const user of database.getAllUsers(options)) {
       broadcasts.push(this.sendBroadcast(user.id, fromChat, messageId));
 
       if (broadcasts.length > broadcastPerSecond) {

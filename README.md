@@ -6,7 +6,7 @@ This repository is based on [File Sharing Bot](https://github.com/CodeXBotz/File
 
 ## Features
 
-- Broadcast messages with stats
+- Broadcast messages with stats, limit, and offset
 - Share any kind of messages
 - You are free to set as many force channels and groups as you want
 - Support db (MongoDB) and no db (in memory), just in case you want to quickly share some files without the need of database

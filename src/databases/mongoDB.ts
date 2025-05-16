@@ -1,6 +1,7 @@
 import mongoose, { Model, Schema, model } from "mongoose";
 import env from "../services/env.js";
 import { User } from "telegraf/typings/core/types/typegram.js";
+import { GetAllUsersOptions } from "../interfaces.js";
 
 export interface MessageDocument {
   shareId: number;
@@ -67,19 +68,20 @@ class MongoDB {
     return this.UserModel.count();
   }
 
-  async *getAllUsers() {
+  async *getAllUsers(options?: GetAllUsersOptions) {
     const totalUsers = await this.getTotalUsers();
-    let cursor = 0;
-    let remaining = totalUsers;
-    const limit = 100;
+    let cursor = options?.offset || 0;
+    let remaining = options?.limit || totalUsers;
 
     while (remaining > 0) {
+      const batchSize = Math.min(remaining, 100);
+
       const users = await this.UserModel.find({}, undefined, {
         skip: cursor,
-        limit,
+        batchSize,
       });
-      cursor += limit;
-      remaining -= limit;
+      cursor += batchSize;
+      remaining -= batchSize;
 
       for (const user of users) {
         yield user;

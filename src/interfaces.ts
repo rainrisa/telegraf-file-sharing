@@ -13,11 +13,18 @@ export type CommandContext = NarrowedContext<
   }
 >;
 
+export type BroadcastOptions = GetAllUsersOptions;
+
+export interface GetAllUsersOptions {
+  limit?: number;
+  offset?: number;
+}
+
 export interface DatabaseClient {
   initialize(): Promise<void>;
   saveMessages(shareId: number, messageIds: number[]): Promise<number>;
   getMessages(shareId: number): Promise<number[] | undefined>;
   saveUser(user: User): Promise<User>;
   getTotalUsers(): Promise<number>;
-  getAllUsers(): AsyncGenerator<User>;
+  getAllUsers(options?: GetAllUsersOptions): AsyncGenerator<User>;
 }
