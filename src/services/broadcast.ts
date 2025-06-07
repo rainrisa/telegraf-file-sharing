@@ -3,8 +3,10 @@ import database from "./database.js";
 import sleep from "../extra/sleep.js";
 import { format } from "date-fns";
 import { BroadcastOptions } from "../interfaces.js";
+import getRandomId from "../extra/getRandomId.js";
 
 export class Broadcast {
+  id: number
   bot: Telegraf<Scenes.SceneContext>;
   success: number;
   deactivated: number;
@@ -15,6 +17,7 @@ export class Broadcast {
   done: boolean;
 
   constructor(bot: Telegraf<Scenes.SceneContext>) {
+    this.id = +getRandomId().toString().slice(0, 3);
     this.bot = bot;
     this.success = 0;
     this.deactivated = 0;
@@ -35,7 +38,9 @@ export class Broadcast {
     return (
       broadcastTitle +
       "\n\n" +
-      "Success: " +
+      "Broadcast ID: " +
+      code(this.id) +
+      "\nSuccess: " +
       code(this.success) +
       "\nDeactivated: " +
       code(this.deactivated) +
@@ -57,7 +62,7 @@ export class Broadcast {
     messageId: number,
   ) {
     try {
-      await this.bot.telegram.copyMessage(chat, fromChat, messageId);
+      await this.bot.telegram.sendMessage(chat, `Test broadcast #${this.id}`)
       this.success++;
     } catch (err) {
       if (err instanceof TelegramError) {
