@@ -18,6 +18,7 @@ app.command("share", commands.shareHandler);
 app.command("broadcast", commands.broadcastHandler);
 app.command("uptime", commands.uptimeHandler);
 app.command("users", commands.usersHandler);
+app.command("forcesubs", commands.forcesubsHandler);
 
 async function main() {
   await database.initialize();
