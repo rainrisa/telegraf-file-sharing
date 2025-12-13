@@ -30,6 +30,7 @@ Currently it lacks some features like:
 - `TELEGRAM_BOT_TOKEN`, _required_, your bot token from [BotFather](https://t.me/BotFather)
 - `DB_CHANNEL_ID`, _required_, a channel where all your files/messages will be stored
 - `FORCE_SUB_IDS`, _optional_, all the chat ids you want people to join
+- `FORCE_SUB_URLS`, _optional_, custom chat links that don't require the bot to join the group
 - `ADMIN_IDS`, _required_, fill least one admin
 - `DATABASE_URL`, _optional_, fill this with your MongoDB uri if you want to use a database, if not, all data will stored in RAM
 - `DEVELOPMENT`, _optional_, set `true` if you are on local so you don't have to setup a web server. Also set this `true` if you want to use long polling instead of webhook

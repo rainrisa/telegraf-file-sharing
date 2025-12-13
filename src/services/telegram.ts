@@ -105,15 +105,21 @@ class Telegram {
 
   async getForceChatButtons(shareId: number, chatsUserHasNotJoined: number[]) {
     const limitPerRow = 2;
+    let buttonCounter = 0;
 
-    const rawButtons = await mapAsync(
-      chatsUserHasNotJoined,
-      async (chatId, index) => {
-        const label = `Chat ${index + 1}`;
+    const rawButtons = env.FORCE_SUB_URLS.map((url) => {
+      buttonCounter++;
+      const label = `Chat ${buttonCounter}`;
+      return Markup.button.url(label, url);
+    });
+    rawButtons.push(
+      ...(await mapAsync(chatsUserHasNotJoined, async (chatId) => {
+        buttonCounter++;
+        const label = `Chat ${buttonCounter}`;
         const inviteLink = await this.getInviteLink(chatId);
 
         return Markup.button.url(label, inviteLink);
-      },
+      })),
     );
     const forceChatButtons = splitArray(rawButtons, limitPerRow);
 
