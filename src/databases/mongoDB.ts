@@ -64,7 +64,7 @@ class MongoDB {
   }
 
   async getTotalUsers() {
-    return this.UserModel.count();
+    return this.UserModel.countDocuments();
   }
 
   async *getAllUsers() {
