@@ -10,7 +10,7 @@
     "build": "prettier -w . && tsc"
   },
   "devDependencies": {
-    "@types/express": "^4.17.17",
+    "@types/express": "^5.0.6",
     "@types/node": "^20.3.2",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.1",
@@ -20,7 +20,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
-    "express": "^4.21.2",
+    "express": "^5.2.1",
     "mongoose": "^7.3.1",
     "telegraf": "^4.12.2"
   },
