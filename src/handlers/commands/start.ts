@@ -17,22 +17,25 @@ export default async function startHandler(ctx: CommandContext) {
   if (!shareId) {
     return telegram.sendMessage(chatId, `Hello ${user.first_name}!`);
   }
-  if (!auth.isAdmin(userId)) {
-    const chatsUserHasNotJoined =
-      await telegram.getChatsUserHasNotJoined(userId);
-    if (chatsUserHasNotJoined.length) {
-      return telegram.sendForceJoinMessage(
-        shareId,
-        chatId,
-        user,
-        chatsUserHasNotJoined,
-      );
-    }
-  }
   const messages = await database.getMessages(Number(shareId));
 
   if (!messages) {
     return telegram.sendMessage(chatId, "Message not found, try another link");
+  }
+
+  if (!messages.direct) {
+    if (!auth.isAdmin(userId)) {
+      const chatsUserHasNotJoined =
+        await telegram.getChatsUserHasNotJoined(userId);
+      if (chatsUserHasNotJoined.length) {
+        return telegram.sendForceJoinMessage(
+          shareId,
+          chatId,
+          user,
+          chatsUserHasNotJoined,
+        );
+      }
+    }
   }
   await telegram.forwardMessages(
     chatId,

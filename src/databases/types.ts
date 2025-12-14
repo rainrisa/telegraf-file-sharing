@@ -14,4 +14,5 @@ export interface IUserRepository<TUser> {
 export interface MessageEntity {
   shareId: number;
   messageIds: number[];
+  direct: boolean;
 }

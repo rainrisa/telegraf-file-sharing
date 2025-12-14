@@ -15,10 +15,11 @@ class Database {
     await this.client.initialize();
   }
 
-  async saveMessages(messageIds: number[]) {
+  async saveMessages(messageIds: number[], direct = false) {
     const message: MessageEntity = {
       shareId: getRandomId(),
       messageIds,
+      direct,
     };
 
     await this.client.saveMessages(message);
