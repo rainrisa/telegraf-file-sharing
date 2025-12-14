@@ -9,10 +9,12 @@ import mapAsync from "../extra/mapAsync.js";
 import splitArray from "../extra/splitArray.js";
 import toNumArr from "../extra/toNumArr.js";
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types.js";
+import { ShareConfig } from "../interfaces.js";
 
 class Telegram {
   app: Telegraf<Scenes.SceneContext>;
   messages: Map<number, number[]>;
+  shareConfig: ShareConfig;
   waitingMessageId: number;
   waitingMessageTimeout: NodeJS.Timeout;
   firstWaitingMessage: boolean;
@@ -21,6 +23,9 @@ class Telegram {
   constructor() {
     this.app = new Telegraf<Scenes.SceneContext>(env.TELEGRAM_BOT_TOKEN);
     this.messages = new Map();
+    this.shareConfig = {
+      direct: false,
+    };
     this.waitingMessageId = NaN;
     this.waitingMessageTimeout = setTimeout(() => {});
     this.firstWaitingMessage = true;
@@ -61,10 +66,21 @@ class Telegram {
     const text =
       "Send me any message and click Finish when you are done!\n" +
       `Total messages: ${totalMessages}`;
+
     const replyMarkup: InlineKeyboardMarkup = {
-      inline_keyboard: [[{ text: "Finish", callback_data: "share-finish" }]],
+      inline_keyboard: [
+        [
+          {
+            text: this.shareConfig.direct ? "Direct ✅" : "Direct ❌",
+            callback_data: "toggle-direct",
+          },
+        ],
+        [{ text: "Finish", callback_data: "share-finish" }],
+      ],
     };
+
     const delay = this.firstWaitingMessage ? 0 : 1000;
+
     this.waitingMessageTimeout = setTimeout(async () => {
       try {
         await this.deleteWaitingMessage(chatId);
@@ -73,9 +89,9 @@ class Telegram {
       const waitingMessage = await this.sendMessage(chatId, text, {
         reply_markup: replyMarkup,
       });
-      if (!waitingMessage) {
-        return;
-      }
+
+      if (!waitingMessage) return;
+
       this.waitingMessageId = waitingMessage.message_id;
       this.firstWaitingMessage = false;
     }, delay);
@@ -144,6 +160,10 @@ class Telegram {
     this.messages.delete(chatId);
     this.firstWaitingMessage = true;
     this.waitingMessageId = NaN;
+  }
+
+  setShareConfig(newConfig: Partial<ShareConfig>) {
+    this.shareConfig = { ...this.shareConfig, ...newConfig };
   }
 
   async forwardMessages(

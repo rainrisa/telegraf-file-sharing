@@ -12,3 +12,7 @@ export type CommandContext = NarrowedContext<
     update_id: number;
   }
 >;
+
+export interface ShareConfig {
+  direct: boolean;
+}

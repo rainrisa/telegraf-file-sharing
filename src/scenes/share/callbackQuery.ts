@@ -18,6 +18,26 @@ export default async function callbackQuerySceneHandler(
 
   const data = ctx.callbackQuery.data;
 
+  if (ctx.callbackQuery.data === "toggle-direct") {
+    telegram.setShareConfig({ direct: !telegram.shareConfig.direct });
+
+    await ctx.editMessageReplyMarkup({
+      inline_keyboard: [
+        [
+          {
+            text: telegram.shareConfig.direct ? "Direct ✅" : "Direct ❌",
+            callback_data: "toggle-direct",
+          },
+        ],
+        [{ text: "✅ Finish", callback_data: "share-finish" }],
+      ],
+    });
+
+    return ctx.answerCbQuery(
+      telegram.shareConfig.direct ? "Direct enabled" : "Direct disabled",
+    );
+  }
+
   if (data === "share-finish") {
     const messageIds = telegram.messages.get(chatId);
 
@@ -33,7 +53,10 @@ export default async function callbackQuerySceneHandler(
       messageIds,
     );
     const botUsername = ctx.botInfo.username;
-    const shareId = await database.saveMessages(forwardedMessageIds);
+    const shareId = await database.saveMessages(
+      forwardedMessageIds,
+      telegram.shareConfig.direct,
+    );
 
     await ctx.editMessageText("Okay");
     await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);
