@@ -8,7 +8,8 @@ This repository is based on [File Sharing Bot](https://github.com/CodeXBotz/File
 
 - Broadcast messages with stats
 - Share any kind of messages
-- You are free to set as many force channels and groups as you want
+- You are free to set as many force sub channels and groups as you want
+- Custom force sub urls without requiring the bot to join the specified channels/groups
 - Support db (MongoDB) and no db (in memory), just in case you want to quickly share some files without the need of database
 - Multiple admins
 - Have short urls, for example: `https://t.me/your_bot?start=2781253471`
@@ -20,6 +21,7 @@ This repository is based on [File Sharing Bot](https://github.com/CodeXBotz/File
 Currently it lacks some features like:
 
 - No customisable, currently you are still required to edit the code directly in order to customize
+- No auto-delete shared messages
 
 ## Usage
 
