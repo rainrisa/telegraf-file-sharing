@@ -1,19 +1,16 @@
 import { User } from "telegraf/typings/core/types/typegram.js";
+import { IRepository } from "./adapter";
+import { MessageEntity } from "./types";
 
-class InMemory {
-  messages: Map<number, number[]>;
-  users: Map<number, User>;
-
-  constructor() {
-    this.messages = new Map();
-    this.users = new Map();
-  }
+class InMemoryRepository implements IRepository<User> {
+  private messages = new Map<number, MessageEntity>();
+  private users = new Map<number, User>();
 
   async initialize() {}
 
-  async saveMessages(shareId: number, messageIds: number[]) {
-    this.messages.set(shareId, messageIds);
-    return shareId;
+  async saveMessages(message: MessageEntity) {
+    this.messages.set(message.shareId, message);
+    return message.shareId;
   }
 
   async getMessages(shareId: number) {
@@ -30,11 +27,12 @@ class InMemory {
   }
 
   async *getAllUsers() {
-    for (const [id, user] of this.users) {
+    for (const user of this.users.values()) {
       yield user;
     }
   }
 }
-const inMemory = new InMemory();
 
-export default inMemory;
+const inMemoryRepository = new InMemoryRepository();
+
+export default inMemoryRepository;

@@ -1,10 +1,11 @@
 import { User } from "telegraf/typings/core/types/typegram.js";
 import getProperDB from "../extra/getProperDB.js";
 import getRandomId from "../extra/getRandomId.js";
-import { DatabaseClient } from "../interfaces.js";
+import { IRepository } from "../databases/adapter.js";
+import { MessageEntity } from "../databases/types.js";
 
 class Database {
-  client: DatabaseClient;
+  private client: IRepository<User>;
 
   constructor() {
     this.client = getProperDB();
@@ -15,10 +16,13 @@ class Database {
   }
 
   async saveMessages(messageIds: number[]) {
-    const shareId = getRandomId();
-    await this.client.saveMessages(shareId, messageIds);
+    const message: MessageEntity = {
+      shareId: getRandomId(),
+      messageIds,
+    };
 
-    return shareId;
+    await this.client.saveMessages(message);
+    return message.shareId;
   }
 
   async getMessages(shareId: number) {

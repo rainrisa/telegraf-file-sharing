@@ -1,5 +1,5 @@
 import { NarrowedContext } from "telegraf";
-import { Update, Message, User } from "telegraf/typings/core/types/typegram.js";
+import { Update, Message } from "telegraf/typings/core/types/typegram.js";
 import {
   SceneContext,
   SceneSessionData,
@@ -12,12 +12,3 @@ export type CommandContext = NarrowedContext<
     update_id: number;
   }
 >;
-
-export interface DatabaseClient {
-  initialize(): Promise<void>;
-  saveMessages(shareId: number, messageIds: number[]): Promise<number>;
-  getMessages(shareId: number): Promise<number[] | undefined>;
-  saveUser(user: User): Promise<User>;
-  getTotalUsers(): Promise<number>;
-  getAllUsers(): AsyncGenerator<User>;
-}

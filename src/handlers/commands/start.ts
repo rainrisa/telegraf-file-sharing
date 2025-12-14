@@ -29,10 +29,14 @@ export default async function startHandler(ctx: CommandContext) {
       );
     }
   }
-  const messageIds = await database.getMessages(Number(shareId));
+  const messages = await database.getMessages(Number(shareId));
 
-  if (!messageIds) {
+  if (!messages) {
     return telegram.sendMessage(chatId, "Message not found, try another link");
   }
-  await telegram.forwardMessages(chatId, env.DB_CHANNEL_ID, messageIds);
+  await telegram.forwardMessages(
+    chatId,
+    env.DB_CHANNEL_ID,
+    messages.messageIds,
+  );
 }

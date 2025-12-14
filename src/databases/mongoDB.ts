@@ -1,14 +1,12 @@
 import mongoose, { Model, Schema, model } from "mongoose";
 import env from "../services/env.js";
 import { User } from "telegraf/typings/core/types/typegram.js";
+import { IRepository } from "./adapter.js";
+import { MessageEntity } from "./types.js";
 
-export interface MessageDocument {
-  shareId: number;
-  messageIds: number[];
-}
 export type UserDocument = User;
 
-export const MessageModel = model<MessageDocument>(
+export const MessageModel = model<MessageEntity>(
   "message",
   new Schema({
     shareId: { type: Number, required: true, unique: true },
@@ -28,65 +26,54 @@ export const UserModel = model<UserDocument>(
     added_to_attachment_menu: { type: Boolean },
   }),
 );
-class MongoDB {
-  db: typeof mongoose;
-  MessageModel: Model<MessageDocument>;
-  UserModel: Model<UserDocument>;
-  databaseUrl: string;
 
-  constructor() {
-    this.db = mongoose;
-    this.MessageModel = MessageModel;
-    this.UserModel = UserModel;
-    this.databaseUrl = env.DATABASE_URL || "";
-  }
+class MongoRepository implements IRepository<User> {
+  private db = mongoose;
+  private databaseUrl = env.DATABASE_URL || "";
 
   async initialize() {
     await this.db.connect(this.databaseUrl);
   }
 
-  async saveMessages(shareId: number, messageIds: number[]) {
-    await new this.MessageModel({
-      shareId,
-      messageIds,
-    }).save();
+  async saveMessages(message: MessageEntity) {
+    await MessageModel.updateOne(
+      { shareId: message.shareId },
+      { $set: message },
+      { upsert: true },
+    );
 
-    return shareId;
+    return message.shareId;
   }
 
   async getMessages(shareId: number) {
-    return (await this.MessageModel.findOne({ shareId }))?.messageIds;
+    const doc = await MessageModel.findOne({
+      shareId,
+    }).lean<MessageEntity | null>();
+
+    return doc ?? undefined;
   }
 
   async saveUser(user: User) {
-    await new this.UserModel(user).save();
+    await UserModel.updateOne(
+      { id: user.id },
+      { $set: user },
+      { upsert: true },
+    );
     return user;
   }
 
   async getTotalUsers() {
-    return this.UserModel.countDocuments();
+    return UserModel.countDocuments();
   }
 
   async *getAllUsers() {
-    const totalUsers = await this.getTotalUsers();
-    let cursor = 0;
-    let remaining = totalUsers;
-    const limit = 100;
-
-    while (remaining > 0) {
-      const users = await this.UserModel.find({}, undefined, {
-        skip: cursor,
-        limit,
-      });
-      cursor += limit;
-      remaining -= limit;
-
-      for (const user of users) {
-        yield user;
-      }
+    const cursor = UserModel.find().cursor();
+    for await (const user of cursor) {
+      yield user;
     }
   }
 }
-const mongoDB = new MongoDB();
 
-export default mongoDB;
+const mongoRepository = new MongoRepository();
+
+export default mongoRepository;
