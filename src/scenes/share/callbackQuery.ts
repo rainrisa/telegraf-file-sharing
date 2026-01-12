@@ -37,5 +37,10 @@ export default async function callbackQuerySceneHandler(
 
     await ctx.editMessageText("Okay");
     await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);
+  } else if (data === "share-cancel") {
+    telegram.clearMessages(chatId);
+
+    await ctx.scene.leave();
+    await ctx.editMessageText("Okay");
   }
 }

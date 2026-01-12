@@ -64,7 +64,12 @@ class Telegram {
       "Send me any message and click Finish when you are done!\n" +
       `Total messages: ${totalMessages}`;
     const replyMarkup: InlineKeyboardMarkup = {
-      inline_keyboard: [[{ text: "Finish", callback_data: "share-finish" }]],
+      inline_keyboard: [
+        [
+          { text: "Cancel", callback_data: "share-cancel" },
+          { text: "Finish", callback_data: "share-finish" },
+        ],
+      ],
     };
     const delay = this.firstWaitingMessage ? 0 : 1000;
     this.waitingMessageTimeout = setTimeout(async () => {
