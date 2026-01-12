@@ -47,6 +47,9 @@ class Telegram {
       },
     ]);
 
+    const me = await this.app.telegram.getMe();
+    console.log(me);
+
     await mapAsync(
       env.FORCE_SUB_IDS,
       async (chatId) => await this.getInviteLink(chatId),
