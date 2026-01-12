@@ -7,7 +7,6 @@ import {
 import filterAsync from "../extra/filterAsync.js";
 import mapAsync from "../extra/mapAsync.js";
 import splitArray from "../extra/splitArray.js";
-import toNumArr from "../extra/toNumArr.js";
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types.js";
 
 class Telegram {
