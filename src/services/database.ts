@@ -1,4 +1,4 @@
-import { DatabaseFactory } from "../databases/DatabaseFactory.js";
+import { DatabaseFactory } from "../databases/databaseFactory.js";
 
 const databaseFactory = new DatabaseFactory();
 const database = databaseFactory.createDatabase();
