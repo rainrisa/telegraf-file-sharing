@@ -28,7 +28,9 @@ export const UserModel = model<UserDocument>(
     added_to_attachment_menu: { type: Boolean },
   }),
 );
-class MongoDB {
+import { DatabaseStrategy } from "../interfaces.js";
+
+class MongoDB implements DatabaseStrategy {
   db: typeof mongoose;
   MessageModel: Model<MessageDocument>;
   UserModel: Model<UserDocument>;

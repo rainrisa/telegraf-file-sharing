@@ -4,6 +4,7 @@ import { callbackQuery } from "telegraf/filters";
 import telegram from "../../services/telegram.js";
 import env from "../../services/env.js";
 import database from "../../services/database.js";
+import getRandomId from "../../extra/getRandomId.js";
 
 export default async function callbackQuerySceneHandler(
   ctx: NarrowedContext<
@@ -33,7 +34,9 @@ export default async function callbackQuerySceneHandler(
       messageIds,
     );
     const botUsername = ctx.botInfo.username;
-    const shareId = await database.saveMessages(forwardedMessageIds);
+
+    const shareId = getRandomId();
+    await database.saveMessages(shareId, forwardedMessageIds);
 
     await ctx.editMessageText("Okay");
     await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);

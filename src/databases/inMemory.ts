@@ -1,6 +1,8 @@
 import { User } from "telegraf/typings/core/types/typegram.js";
 
-class InMemory {
+import { DatabaseStrategy } from "../interfaces.js";
+
+class InMemory implements DatabaseStrategy {
   messages: Map<number, number[]>;
   users: Map<number, User>;
 
