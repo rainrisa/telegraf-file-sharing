@@ -1,5 +1,4 @@
 import mongoose, { Model, Schema, model } from "mongoose";
-import env from "../services/env.js";
 import { User } from "telegraf/typings/core/types/typegram.js";
 
 export interface MessageDocument {
@@ -30,17 +29,17 @@ export const UserModel = model<UserDocument>(
 );
 import { DatabaseStrategy } from "../interfaces.js";
 
-class MongoDB implements DatabaseStrategy {
+export class MongoDB implements DatabaseStrategy {
   db: typeof mongoose;
   MessageModel: Model<MessageDocument>;
   UserModel: Model<UserDocument>;
   databaseUrl: string;
 
-  constructor() {
+  constructor(uri: string) {
     this.db = mongoose;
     this.MessageModel = MessageModel;
     this.UserModel = UserModel;
-    this.databaseUrl = env.DATABASE_URL || "";
+    this.databaseUrl = uri;
   }
 
   async initialize() {
@@ -89,6 +88,3 @@ class MongoDB implements DatabaseStrategy {
     }
   }
 }
-const mongoDB = new MongoDB();
-
-export default mongoDB;

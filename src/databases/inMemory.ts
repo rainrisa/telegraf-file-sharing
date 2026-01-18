@@ -2,7 +2,7 @@ import { User } from "telegraf/typings/core/types/typegram.js";
 
 import { DatabaseStrategy } from "../interfaces.js";
 
-class InMemory implements DatabaseStrategy {
+export class InMemory implements DatabaseStrategy {
   messages: Map<number, number[]>;
   users: Map<number, User>;
 
@@ -37,6 +37,3 @@ class InMemory implements DatabaseStrategy {
     }
   }
 }
-const inMemory = new InMemory();
-
-export default inMemory;
