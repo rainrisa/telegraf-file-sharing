@@ -5,15 +5,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm ./src/main.ts",
-    "start": "node ./dist/main.js",
+    "dev": "tsx watch ./src/main.ts",
+    "start": "tsx ./src/main.ts",
     "build": "prettier -w . && tsc"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.1",
     "prettier": "^3.3.3",
-    "ts-node": "^10.9.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
@@ -22,7 +21,8 @@
     "envalid": "^8.0.0",
     "express": "^5.2.1",
     "mongoose": "^9.0.1",
-    "telegraf": "^4.12.2"
+    "telegraf": "^4.12.2",
+    "tsx": "^4.21.0"
   },
   "packageManager": "yarn@1.22.22"
 }
