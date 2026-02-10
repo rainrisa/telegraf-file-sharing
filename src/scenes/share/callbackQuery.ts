@@ -34,12 +34,23 @@ export default async function callbackQuerySceneHandler(
       messageIds,
     );
     const botUsername = ctx.botInfo.username;
+    const maxRetries = 5;
 
-    const shareId = getRandomId();
-    await database.saveMessages(shareId, forwardedMessageIds);
+    let shareId: number;
 
-    await ctx.editMessageText("Okay");
-    await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);
+    for (let i = 0; i < maxRetries; i++) {
+      shareId = getRandomId();
+      try {
+        await database.saveMessages(shareId, forwardedMessageIds);
+        await ctx.editMessageText("Okay");
+        await ctx.reply(`https://t.me/${botUsername}?start=${shareId}`);
+
+        break;
+      } catch (err) {
+        if (i === maxRetries - 1) throw err;
+        return ctx.reply("Something went wrong, try again");
+      }
+    }
   } else if (data === "share-cancel") {
     telegram.clearMessages(chatId);
 
