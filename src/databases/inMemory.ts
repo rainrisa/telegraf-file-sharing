@@ -59,6 +59,9 @@ export class InMemory implements DatabaseStrategy {
   }
 
   async saveMessages(shareId: number, messageIds: number[]) {
+    if (this.messages.has(shareId)) {
+      throw new Error(`Duplicate shareId: ${shareId}`);
+    }
     this.messages.set(shareId, messageIds);
     await this.persistMessages();
     return shareId;
